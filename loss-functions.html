@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loss Functions & Cross-Entropy</title>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
+<style>
+  :root {
+    --fg: #1a1a1a;
+    --fg-muted: #555;
+    --bg: #ffffff;
+    --bg-subtle: #f7f7f7;
+    --border: #e0e0e0;
+    --accent: #0066cc;
+  }
+  body {
+    font-family: "Georgia", "Times New Roman", serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 60px 50px;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+  }
+  h1 {
+    font-size: 2.2em;
+    text-align: center;
+    margin-bottom: 8px;
+    border-bottom: 2px solid var(--fg);
+    padding-bottom: 16px;
+  }
+  .subtitle {
+    text-align: center;
+    color: var(--fg-muted);
+    font-size: 0.95em;
+    margin-bottom: 40px;
+  }
+  h2 {
+    font-size: 1.5em;
+    margin-top: 48px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+  }
+  h3 {
+    font-size: 1.2em;
+    margin-top: 32px;
+  }
+  .toc {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    padding: 20px 30px;
+    margin: 30px 0 50px;
+    border-radius: 4px;
+  }
+  .toc h2 {
+    border: none;
+    margin-top: 0;
+    font-size: 1.2em;
+  }
+  .toc ol {
+    padding-left: 20px;
+  }
+  .toc li {
+    margin: 6px 0;
+  }
+  .toc a {
+    text-decoration: none;
+    color: var(--accent);
+  }
+  .toc a:hover {
+    text-decoration: underline;
+  }
+  .math {
+    text-align: center;
+    margin: 20px 0;
+    padding: 12px 20px;
+    background: var(--bg-subtle);
+    border-radius: 4px;
+    overflow-x: auto;
+  }
+  code {
+    font-family: "Menlo", "Consolas", monospace;
+    font-size: 0.9em;
+    background: var(--bg-subtle);
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+  .example {
+    border-left: 3px solid var(--accent);
+    padding: 16px 24px;
+    margin: 24px 0;
+    background: var(--bg-subtle);
+  }
+  .example h3 {
+    margin-top: 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: left;
+  }
+  th {
+    background: var(--bg-subtle);
+    font-weight: bold;
+  }
+  .note {
+    color: var(--fg-muted);
+    font-style: italic;
+    font-size: 0.9em;
+  }
+</style>
+</head>
+<body>
+
+<h1>Loss Functions &amp; Cross-Entropy Loss</h1>
+<p class="subtitle">A conceptual and mathematical guide</p>
+
+<div class="toc">
+<h2>Table of Contents</h2>
+<ol>
+  <li><a href="#what-is-a-loss-function">What is a Loss Function?</a></li>
+  <li><a href="#types-of-loss-functions">Types of Loss Functions</a>
+    <ol>
+      <li><a href="#mse">Mean Squared Error (MSE)</a></li>
+      <li><a href="#mae">Mean Absolute Error (MAE)</a></li>
+      <li><a href="#binary-ce">Binary Cross-Entropy (BCE)</a></li>
+      <li><a href="#categorical-ce">Categorical Cross-Entropy</a></li>
+      <li><a href="#hinge">Hinge Loss</a></li>
+      <li><a href="#huber">Huber Loss</a></li>
+    </ol>
+  </li>
+  <li><a href="#information-theory">Information Theory Background</a></li>
+  <li><a href="#cross-entropy">Cross-Entropy Loss: Deep Dive</a>
+    <ol>
+      <li><a href="#ce-from-entropy">Deriving Cross-Entropy from Entropy</a></li>
+      <li><a href="#ce-classification">Cross-Entropy for Classification</a></li>
+      <li><a href="#ce-softmax">Fusing with Softmax</a></li>
+      <li><a href="#ce-intuition">Intuition</a></li>
+    </ol>
+  </li>
+  <li><a href="#worked-example">Worked Example</a></li>
+  <li><a href="#summary">Summary</a></li>
+</ol>
+</div>
+
+<h2 id="what-is-a-loss-function">1. What is a Loss Function?</h2>
+
+<p>A <strong>loss function</strong> (also called a <em>cost function</em> or <em>objective function</em>) quantifies how far a model's prediction is from the true value. Given a model \( f(x; \theta) \) with parameters \( \theta \), the loss for a single example is:</p>
+
+<div class="math">
+$$\mathcal{L}(f(x; \theta), y)$$
+</div>
+
+<p>Over a dataset of \( N \) examples, we minimize the <strong>average loss</strong>:</p>
+
+<div class="math">
+$$\mathcal{L}_{\text{total}} = \frac{1}{N} \sum_{i=1}^{N} \mathcal{L}(f(x_i; \theta), y_i)$$
+</div>
+
+<p>The training loop computes the gradient of this loss with respect to \( \theta \) and updates parameters to reduce it. The choice of loss function directly determines what the model optimizes and how it behaves.</p>
+
+<h2 id="types-of-loss-functions">2. Types of Loss Functions</h2>
+
+<p>Loss functions are typically chosen based on the <strong>type of task</strong>:</p>
+
+<table>
+  <tr><th>Task</th><th>Typical Loss Functions</th></tr>
+  <tr><td>Regression</td><td>MSE, MAE, Huber</td></tr>
+  <tr><td>Binary classification</td><td>Binary Cross-Entropy, Hinge</td></tr>
+  <tr><td>Multi-class classification</td><td>Categorical Cross-Entropy</td></tr>
+</table>
+
+<h3 id="mse">2.1 Mean Squared Error (MSE)</h3>
+<p>Used for regression. Penalizes larger errors quadratically.</p>
+<div class="math">
+$$\mathcal{L} = \frac{1}{N} \sum_{i=1}^{N} (\hat{y}_i - y_i)^2$$
+</div>
+<p class="note">The squaring means outliers have outsized influence on the loss.</p>
+
+<h3 id="mae">2.2 Mean Absolute Error (MAE)</h3>
+<p>Also for regression, but more robust to outliers.</p>
+<div class="math">
+$$\mathcal{L} = \frac{1}{N} \sum_{i=1}^{N} |\hat{y}_i - y_i|$$
+</div>
+
+<h3 id="binary-ce">2.3 Binary Cross-Entropy (BCE)</h3>
+<p>Used for binary classification. \( y \in \{0, 1\} \), \( \hat{y} \in (0, 1) \).</p>
+<div class="math">
+$$\mathcal{L} = -\frac{1}{N} \sum_{i=1}^{N} \left[ y_i \log(\hat{y}_i) + (1 - y_i) \log(1 - \hat{y}_i) \right]$$
+</div>
+
+<h3 id="categorical-ce">2.4 Categorical Cross-Entropy</h3>
+<p>Used for multi-class classification. The focus of this document &mdash; explained in detail below.</p>
+
+<h3 id="hinge">2.5 Hinge Loss</h3>
+<p>Used in SVMs. Encourages a margin between classes.</p>
+<div class="math">
+$$\mathcal{L} = \max(0, 1 - y \cdot \hat{y})$$
+</div>
+<p>Here \( y \in \{-1, +1\} \).</p>
+
+<h3 id="huber">2.6 Huber Loss</h3>
+<p>A compromise between MSE and MAE. Behaves like MSE for small errors, MAE for large errors.</p>
+<div class="math">
+$$\mathcal{L} = \begin{cases} \frac{1}{2}(\hat{y} - y)^2 & \text{if } |\hat{y} - y| \leq \delta \\ \delta \, |\hat{y} - y| - \frac{1}{2}\delta^2 & \text{otherwise} \end{cases}$$
+</div>
+
+<h2 id="information-theory">3. Information Theory Background</h2>
+
+<p>To understand cross-entropy, we need three concepts from information theory:</p>
+
+<h3>3.1 Entropy</h3>
+<p>Entropy measures the <strong>uncertainty</strong> or <strong>information content</strong> of a probability distribution \( p \):</p>
+<div class="math">
+$$H(p) = -\sum_{x} p(x) \log p(x)$$
+</div>
+<p>A uniform distribution (all outcomes equally likely) has maximum entropy. A peaked distribution (one outcome almost certain) has near-zero entropy.</p>
+
+<h3>3.2 KL Divergence</h3>
+<p>The <strong>Kullback-Leibler divergence</strong> measures how much one distribution \( q \) differs from a reference distribution \( p \):</p>
+<div class="math">
+$$D_{\text{KL}}(p \,\|\, q) = \sum_{x} p(x) \log \frac{p(x)}{q(x)}$$
+</div>
+<p>It is always non-negative and equals zero only when \( p = q \). Note: KL divergence is <em>not</em> symmetric.</p>
+
+<h3>3.3 Relationship</h3>
+<p>Cross-entropy decomposes as:</p>
+<div class="math">
+$$H(p, q) = H(p) + D_{\text{KL}}(p \,\|\, q)$$
+</div>
+<p>Since \( H(p) \) is fixed by the true labels, <strong>minimizing cross-entropy is equivalent to minimizing KL divergence</strong> &mdash; i.e., making the predicted distribution match the true distribution.</p>
+
+<h2 id="cross-entropy">4. Cross-Entropy Loss: Deep Dive</h2>
+
+<h3 id="ce-from-entropy">4.1 Deriving Cross-Entropy from Entropy</h3>
+
+<p>The <strong>cross-entropy</strong> of a true distribution \( p \) and a predicted distribution \( q \) is:</p>
+
+<div class="math">
+$$H(p, q) = -\sum_{x} p(x) \log q(x)$$
+</div>
+
+<p>This measures the average number of bits needed to encode events drawn from \( p \) using a code optimal for \( q \). If \( q \) matches \( p \) perfectly, cross-entropy equals entropy. The worse the match, the higher the cross-entropy.</p>
+
+<h3 id="ce-classification">4.2 Cross-Entropy for Classification</h3>
+
+<p>In classification, the true distribution is a <strong>one-hot vector</strong>. For a problem with \( C \) classes and true class \( c \):</p>
+
+<div class="math">
+$$p = [0, 0, \ldots, 1, \ldots, 0] \quad \text{(1 at position } c \text{, 0 elsewhere)}$$
+</div>
+
+<p>Plugging into the cross-entropy formula, since \( p(x) = 0 \) for all wrong classes, every term vanishes except the true class:</p>
+
+<div class="math">
+$$H(p, q) = -\sum_{x} p(x) \log q(x) = -\log q(c)$$
+</div>
+
+<p>So cross-entropy for a single classification example simplifies to just the <strong>negative log-likelihood</strong> of the correct class's predicted probability.</p>
+
+<h3 id="ce-softmax">4.3 Fusing with Softmax</h3>
+
+<p>The model produces raw <strong>logits</strong> \( \mathbf{z} = [z_1, z_2, \ldots, z_C] \). To get a probability distribution, we apply <strong>softmax</strong>:</p>
+
+<div class="math">
+$$q_i = \frac{\exp(z_i)}{\sum_{j} \exp(z_j)}$$
+</div>
+
+<p>Substituting into the loss:</p>
+
+<div class="math">
+$$\mathcal{L} = -\log q(c) = -\log \frac{\exp(z_c)}{\sum_{j} \exp(z_j)}$$
+</div>
+
+<div class="math">
+$$\mathcal{L} = -z_c + \log \left( \sum_{j} \exp(z_j) \right)$$
+</div>
+
+<p>This is exactly what <code>nn.CrossEntropyLoss</code> computes in PyTorch &mdash; it fuses softmax + negative log-likelihood into a single operation. This is done for <strong>numerical stability</strong>: computing softmax separately can lead to overflow in the exponentials, while the fused form allows the use of the log-sum-exp trick.</p>
+
+<p>For a batch of \( N \) examples:</p>
+
+<div class="math">
+$$\mathcal{L} = -\frac{1}{N} \sum_{i=1}^{N} \left[ -z_{i,c_i} + \log \left( \sum_{j} \exp(z_{i,j}) \right) \right]$$
+</div>
+
+<h3 id="ce-intuition">4.4 Intuition</h3>
+
+<table>
+  <tr><th>Model predicts</th><th>\( q(c) \)</th><th>\( \text{Loss} = -\log q(c) \)</th><th>Meaning</th></tr>
+  <tr><td>Correct class with high confidence</td><td>0.99</td><td>0.01</td><td>Near-zero penalty</td></tr>
+  <tr><td>Correct class with moderate confidence</td><td>0.70</td><td>0.36</td><td>Small penalty</td></tr>
+  <tr><td>Correct class with low confidence</td><td>0.10</td><td>2.30</td><td>Large penalty</td></tr>
+  <tr><td>Correct class with near-zero confidence</td><td>0.01</td><td>4.61</td><td>Huge penalty</td></tr>
+  <tr><td>Correct class with zero confidence</td><td>0.00</td><td>\( \infty \)</td><td>Infinite penalty</td></tr>
+</table>
+
+<p>The \( -\log \) creates an <strong>exponentially growing penalty</strong> as the model becomes more confidently wrong. This is the key property that makes cross-entropy effective for classification &mdash; it strongly discourages the model from assigning near-zero probability to the correct class.</p>
+
+<h2 id="worked-example">5. Worked Example</h2>
+
+<div class="example">
+<h3>3-Class Classification</h3>
+
+<p>Suppose we have 3 classes: <strong>Cat, Dog, Bird</strong>. The true label is <strong>Dog</strong> (class index 1).</p>
+
+<p>The model outputs raw logits:</p>
+<div class="math">
+$$\mathbf{z} = [2.0, 1.0, 0.1] \quad \text{(Cat=2.0, Dog=1.0, Bird=0.1)}$$
+</div>
+
+<p><strong>Step 1: Softmax</strong></p>
+<div class="math">
+$$\exp(\mathbf{z}) = [7.389, 2.718, 0.105] \quad \text{sum} = 10.212$$
+</div>
+<div class="math">
+$$\mathbf{q} = [0.723, 0.266, 0.010]$$
+</div>
+
+<p>The model assigns 72.3% to Cat, 26.6% to Dog, 1.0% to Bird.</p>
+
+<p><strong>Step 2: Cross-Entropy</strong></p>
+<p>True class is Dog (index 1), so we take \( q(1) = 0.266 \):</p>
+<div class="math">
+$$\mathcal{L} = -\log(0.266) = 1.324$$
+</div>
+
+<p><strong>Step 3: Compare &mdash; what if the model had predicted correctly?</strong></p>
+<p>If the logits were <code>[1.0, 2.0, 0.1]</code> instead (Dog highest):</p>
+<div class="math">
+$$\mathbf{q} = [0.266, 0.723, 0.010]$$
+</div>
+<div class="math">
+$$\mathcal{L} = -\log(0.723) = 0.324$$
+</div>
+
+<p>The loss drops from <strong>1.324</strong> to <strong>0.324</strong> &mdash; the model is rewarded for assigning higher probability to the correct class.</p>
+
+<p><strong>Step 4: PyTorch equivalent</strong></p>
+<pre><code>import torch
+import torch.nn as nn
+
+logits = torch.tensor([[2.0, 1.0, 0.1]])  # shape: (1, 3)
+target = torch.tensor([1])                  # Dog = class index 1
+
+loss_fn = nn.CrossEntropyLoss()
+loss = loss_fn(logits, target)              # tensor(1.3244)</code></pre>
+
+</div>
+
+<h2 id="summary">6. Summary</h2>
+
+<table>
+  <tr><th>Concept</th><th>Formula</th><th>Use Case</th></tr>
+  <tr><td>MSE</td><td>\( \frac{1}{N} \sum (\hat{y} - y)^2 \)</td><td>Regression</td></tr>
+  <tr><td>MAE</td><td>\( \frac{1}{N} \sum |\hat{y} - y| \)</td><td>Regression (robust)</td></tr>
+  <tr><td>Huber</td><td>MSE for small errors, MAE for large</td><td>Regression (balanced)</td></tr>
+  <tr><td>Hinge</td><td>\( \max(0, 1 - y \cdot \hat{y}) \)</td><td>SVM / margin classification</td></tr>
+  <tr><td>Binary CE</td><td>\( -[y \log \hat{y} + (1-y) \log(1-\hat{y})] \)</td><td>Binary classification</td></tr>
+  <tr><td>Categorical CE</td><td>\( -\log q(c) = -z_c + \log(\sum \exp(z_j)) \)</td><td>Multi-class classification</td></tr>
+</table>
+
+<p>Cross-entropy loss is the standard choice for classification because:</p>
+<ul>
+  <li>It derives from information theory &mdash; minimizing it makes the predicted distribution match the true distribution.</li>
+  <li>The \( -\log \) penalty grows exponentially for confidently wrong predictions.</li>
+  <li>Fused with softmax, it is numerically stable and efficient to compute.</li>
+  <li>Its gradient is simply \( \mathbf{q} - \mathbf{p} \) (softmax output minus one-hot target), which is clean and well-behaved for gradient descent.</li>
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,252 @@
+the person walks to the house
+the person runs to the park
+the person sits on the chair
+the person stands near the door
+the person opens the door
+the person closes the window
+the person reads a book
+the person writes a note
+the person drinks water
+the person eats food
+
+the man walks down the street
+the woman walks down the street
+the child plays in the park
+the family eats dinner at home
+the friend visits the house
+the teacher helps the student
+the doctor helps the patient
+the worker starts the job
+the driver stops the car
+the neighbor waves hello
+
+the cat sleeps on the bed
+the dog runs in the yard
+the bird flies over the tree
+the fish swims in the water
+the horse walks near the field
+the animal eats from the bowl
+the pet sits near the person
+the dog barks at the noise
+the cat looks at the bird
+the bird sings in the morning
+
+the house has a kitchen
+the house has a bedroom
+the house has a bathroom
+the house has a living room
+the kitchen has a table
+the bedroom has a bed
+the bathroom has a sink
+the living room has a sofa
+the window lets in light
+the door leads outside
+
+the table is in the room
+the chair is near the table
+the lamp is on the desk
+the phone is on the table
+the computer is on the desk
+the book is on the shelf
+the bag is under the chair
+the key is near the door
+the clock is on the wall
+the picture is on the wall
+
+the sun rises in the morning
+the sun shines in the sky
+the rain falls from the cloud
+the snow falls in winter
+the wind blows through the trees
+the weather is warm today
+the weather is cold today
+the sky is blue today
+the night is dark and quiet
+the day is bright and clear
+
+the morning starts with breakfast
+the afternoon is after lunch
+the evening comes before night
+the person sleeps at night
+the week has many days
+the month has many weeks
+the year has many months
+today is a good day
+tomorrow is another day
+yesterday was a long day
+
+the person eats breakfast in the morning
+the person eats lunch in the afternoon
+the person eats dinner in the evening
+the child drinks milk with breakfast
+the adult drinks coffee in the morning
+the family drinks tea after dinner
+the cook makes soup in the kitchen
+the cook makes rice for dinner
+the cook makes bread in the oven
+the person cuts fruit with a knife
+
+the apple is red and sweet
+the banana is yellow and soft
+the orange is round and bright
+the bread is warm and fresh
+the rice is hot in the bowl
+the soup is warm in the bowl
+the fish is on the plate
+the chicken is on the plate
+the vegetables are green and fresh
+the water is cold and clean
+
+the student goes to school
+the student studies in class
+the teacher explains the lesson
+the class reads the book
+the student writes the answer
+the student asks a question
+the teacher gives an answer
+the student uses a pencil
+the student opens the notebook
+the student learns a new word
+
+the worker goes to work
+the worker uses a computer
+the worker sends an email
+the worker reads a message
+the worker joins a meeting
+the manager plans the project
+the team finishes the task
+the office has many desks
+the job starts in the morning
+the job ends in the evening
+
+the car drives on the road
+the bus stops at the station
+the train arrives at the station
+the plane flies over the city
+the bike moves down the street
+the person walks across the road
+the driver turns left
+the driver turns right
+the traveler carries a bag
+the traveler buys a ticket
+
+the city has many streets
+the town has a small market
+the village is near the river
+the road goes through the forest
+the bridge crosses the river
+the store sells food
+the market sells fruit
+the bank is near the store
+the hospital is near the school
+the library is near the park
+
+the person feels happy today
+the person feels sad today
+the person feels tired after work
+the person feels hungry before dinner
+the person feels thirsty after running
+the person feels cold in winter
+the person feels warm in summer
+the person feels calm at night
+the person feels excited about travel
+the person feels worried about the test
+
+the baby is small
+the child is young
+the adult is older
+the parent helps the child
+the mother cooks dinner
+the father drives the car
+the brother reads a book
+the sister writes a note
+the friend shares food
+the family lives in the house
+
+the red car is fast
+the blue car is slow
+the green tree is tall
+the small dog is friendly
+the big house is old
+the new phone is useful
+the old book is interesting
+the clean water is fresh
+the dirty floor needs cleaning
+the quiet room is peaceful
+
+the person wants more water
+the person needs more food
+the person likes warm soup
+the person likes cold water
+the person knows the answer
+the person thinks about the problem
+the person says hello to the friend
+the person hears a sound
+the person sees the bird
+the person finds the key
+
+the person gives the book to the friend
+the friend gives the pen to the student
+the teacher gives homework to the class
+the parent gives food to the child
+the worker gives a report to the manager
+the doctor gives medicine to the patient
+the driver gives a ride to the neighbor
+the cook gives soup to the family
+the seller gives fruit to the buyer
+the buyer gives money to the seller
+
+the person is in the house
+the person is at the park
+the person is near the school
+the person is beside the river
+the person is under the tree
+the person is behind the door
+the person is between two chairs
+the person is across the street
+the person is inside the room
+the person is outside the house
+
+the dog and cat are pets
+the sun and moon are in the sky
+the table and chair are in the room
+the book and pencil are on the desk
+the bread and soup are for dinner
+the car and bus are on the road
+the teacher and student are in class
+the doctor and patient are in the hospital
+the buyer and seller are at the market
+the parent and child are at home
+
+the person walks slowly
+the person runs quickly
+the person speaks clearly
+the person listens carefully
+the person reads quietly
+the person writes neatly
+the person works hard
+the person waits patiently
+the person smiles happily
+the person sleeps deeply
+
+the simple sentence is easy
+the hard problem takes time
+the good answer helps the student
+the bad weather stops the trip
+the long road crosses the city
+the short path goes to the park
+the high mountain is far away
+the low chair is near the table
+the full cup has water
+the empty bowl needs food
+
+people need food and water
+people live in houses and cities
+people work at jobs and schools
+people travel by car bus train and plane
+people talk with family and friends
+people read books and messages
+people use phones and computers
+people buy food at stores and markets
+people rest after long days
+people learn new things every day
